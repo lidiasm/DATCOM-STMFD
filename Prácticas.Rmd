@@ -1,0 +1,78 @@
+---
+title: "Series Temporales y Minería de Flujos de Datos"
+author: "Lidia Sánchez Mérida"
+output: pdf_document
+---
+
+# Parte teórica
+
+## Análisis de la serie temporal
+
+Una **serie temporal** es un conjunto de datos que representa una magnitud observada durante un período de tiempo determinado. Para facilitar el análisis de su comportamiento **descomponemos la serie temporal** en tres componentes principales: 
+
+1. **Tendencia**. Representa el incremento o decremento de los valores durante el tiempo de observación. Existen varias técnicas principales para modelar el comportamiento de esta componente:
+
+   * **Estimación funcional**. Este método consiste en modelar la tendencia a partir de su aproximación a la función matemática cuyo comportamiento sea más similar a su representación gráfica.
+   
+   * **Filtrado**. Aplica un filtro de **medias móviles** para facilitar la detección de la tendencia y la existencia de ciclos en una serie temporal estacional. El objetivo consiste en calcular la media aritmética de un conjunto de puntos en el tiempo para intentar aproximar la serie temporal a una función matemática. 
+
+2. **Estacionalidad**. La componente estacional indica que existen períodos de tiempo determinados en los que existe un determinado patrón de datos, como puede ser mensual o anual. Del mismo modo, en esta componente también podemos identificar **ciclos**, los cuales se definen mediante el aumento o disminución de valores durante un intervalo de tiempo irregular.
+
+3. **Ruido**. Contiene los datos restantes de la serie temporal que no se pueden modelar con ninguna de las componentes anteriores. 
+
+## Conjuntos de entrenamiento y test
+
+El modelado de una serie temporal se reduce básicamente a la resolución de un problema de clasificación. Por ello, es necesario **dividir el conjunto de datos en entrenamiento y validación** con los que construir uno o varios modelos y testar su capacidad de generalización al realizar predicciones futuras. Dependiendo del contexto del problema a resolver y la información disponible sobre la serie temporal, existen varias técnicas que se pueden emplear para llevar a cabo esta partición. Una de las más populares consiste en tomar un **porcentaje o un subconjunto de datos para entrenamiento, mientras que los restantes conforman el conjunto de test**.
+
+# Parte práctica
+
+## Análisis de la serie temporal
+
+En primer lugar cargamos los datos del fichero proporcionado utilizando la función `scan` y creamos un objeto específico para el tratamiento de series temporales. Comenzamos su análisis aplicando una **descomposición aditiva** para dividir la serie temporal en las tres componentes explicadas en la parte teórica: tendencia, estacionalidad y ruido. Un paso previo a la descomposición consiste en determinar **la frecuencia de la serie**. Al no conocer su valor real ni disponer de ningún tipo de contexto sobre la procedencia de los datos, considerando únicamente la existencia de 96 valores podemos intuir que se trata de una **serie mensual**. Si observamos las diferentes componentes representadas en el gráfico, a simple vista parece que la serie temporal con una frecuencia de 30 días **no tiene tendencia**, ya que su comportamiento no se asemeja a ninguna función matemática conocida. En cambio, **sí parece tratarse de una serie estacional** puesto que en la tercera gráfica aparece un mismo patrón repetitivo durante el mismo período de tiempo. Adicionalmente, en la última gráfica podemos observar que **el ruido parece totalmente aleatorio** por lo que parece estar compuesto por datos que no representan conocimiento útil. Finalmente, podemos apreciar que **no existen valores perdidos** por lo que no se aplicarán técnicas relativas a la imputación de este tipo de datos.
+
+```{r}
+# Cargamos los datos de la serie temporal
+serie <- scan("dataseries.dat")
+# Comprobamos si existen valores perdidos
+sum(is.na(serie))
+# Creamos un objeto time-series suponiendo una frecuencia mensual (30 días)
+serie.ts <- ts(serie, frequency=30)
+# Descomposición aditiva de la serie temporal
+plot(decompose(serie.ts))
+```
+
+Sin embargo, visualizando el contenido del fichero parece existir un patrón divisorio de cinco valores, a excepción de la última línea, por lo que su **frecuencia podría ser de 5 días**. Si realizamos una segunda descomposición aditiva con este nuevo valor, podemos observar en la siguiente representación que la serie temporal **tampoco parece disponer de una tendencia reconocible, aunque su patrón estacional es más fácil de identificar**, comparado con el obtenido en el caso anterior asumiendo una frecuencia mensual. En relación a la componente ruidosa podemos observar que sus datos siguen pareciendo totalmente aleatorios, por lo que no se puede extraer información útil que nos ayude en el análisis y modelado de esta serie temporal.
+
+Tras comparar los resultados gráficos de sendos experimentos, en mi opinión el **comportamiento de esta serie temporal parece ser más fácil de explicar al establecer una frecuencia de 5 días** y por ende será la que considere en este trabajo.
+
+```{r}
+# Cargamos los datos de la serie temporal
+serie <- scan("dataseries.dat")
+# Creamos un objeto time-series suponiendo una frecuencia de 5 días
+serie.ts <- ts(serie, frequency=5)
+# Descomposición aditiva de la serie temporal
+plot(decompose(serie.ts))
+```
+Una vez establecida la frecuencia, a continuación procedemos a aplicar la **técnica de filtrado** explicada anteriormente para confirmarque esta serie temporal no se caracteriza por una tendencia concreta. Para ello se calculan **las medidas móviles con un número diferente de puntos** con los que generar distintas aproximaciones a la serie temporal original y así intentar establecer alguna similitud con una función matemática. No obstante, tal y como podemos apreciar en las diferentes gráficas, no ha sido posible por lo que **esta serie temporal no tiene una tendencia definida**.
+
+```{r}
+for (k in 5:10) {
+  # Filtramos la serie calculando las medias móviles considerando un conjunto
+  # de puntos k
+  serie.filter <- rep(1/k, k)
+  filtered.serie <- filter(serie, filter=serie.filter, 
+                           sides=2, method="convolution")
+  # Representamos la serie original y la estimación
+  series <- matrix(c(t(serie), t(filtered.serie)), ncol=2)
+  matplot(series, pch=1, type="l")
+}
+```
+
+## Conjuntos de entrenamiento y test
+
+Al no disponer de ningún tipo de información o contexto sobre el problema de clasificación o la serie temporal, se ha optado por realizar una partición tradicional de **90% de datos para entrenamiento y el 10% restante para test**.
+
+```{r}
+
+```
+
