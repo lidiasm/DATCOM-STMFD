@@ -1,2 +1,3 @@
-# DATCOM-STMFD
-Repositorio para la asignatura Series Temporales y Minería de Flujos de Datos del Máster en Ciencia de Datos e Ingeniería de Computadores
+# Series Temporales y Minería de Flujos de Datos
+
+## Máster Universitario en Ciencia de Datos e Ingeniería de Computadores 21-22
