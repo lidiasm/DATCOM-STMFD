@@ -1,8 +1,24 @@
 ---
-title: "Series Temporales y Minería de Flujos de Datos"
-author: "Lidia Sánchez Mérida"
 output: pdf_document
 ---
+
+\centering
+
+![Logo UGR](imgs/logo_ugr.jpg)
+\textsc{\\[1cm] \LARGE SERIES TEMPORALES Y MINERÍA DE FLUJOS DE DATOS\\[1cm]}
+\textsc{\Large MÁSTER EN CIENCIA DE DATOS E INGENIERÍA DE COMPUTADORES\\[1cm]}
+\textsc{\Large\bfseries Trabajo autónomo I: Series Temporales \\}
+\noindent\rule[-1ex]{\textwidth}{3pt}
+\textsc{\Large\bfseries Curso 2021-2022 \\}
+
+\textsc{\\[1cm] \large\bfseries Autora: Lidia Sánchez Mérida \\[1cm]}
+![Logo ETSIIT](imgs/etsiit_logo.png)
+\textsc{\\[1cm] \large Escuela Técnica Superior de Ingenierías Informática y de Telecomunicación}\\
+\textsc{\\[1cm] \large Granada, 15 de Abril de 2022}
+
+\pagebreak
+
+\raggedright
 
 # Parte teórica
 
@@ -14,7 +30,7 @@ Tras realizar un análisis general sobre la serie temporal en cuestión, hemos p
 
 Una **serie temporal** es un conjunto de datos que representa una magnitud observada durante un período de tiempo determinado. Para facilitar el análisis de su comportamiento **descomponemos la serie temporal** en tres componentes principales: 
 
-1. **Tendencia**. Representa el incremento o decremento de los valores durante el tiempo de observación. Existen diversas técnicas para modelar la tendencia de una serie temporal, entre las cuales se encuentran las dos que se emplean en este trabajo:
+1. **Tendencia**. Representa el incremento o decremento de los valores durante el tiempo observado. Existen diversas técnicas para modelar la tendencia de una serie temporal, entre las cuales se encuentran las dos que se emplean en este trabajo:
 
    * **Estimación funcional**. Este método púramente visual consiste en modelar la tendencia a partir de su aproximación a la función matemática cuyo comportamiento sea más similar a su representación gráfica.
    
@@ -26,13 +42,13 @@ Una **serie temporal** es un conjunto de datos que representa una magnitud obser
 
 ## Estacionariedad
 
-Una serie temporal se caracteriza por ser estacionaria si sus **propiedades se mantienen constantes en el tiempo** de observación. Existen tanto técnicas visuales como métodos estadísticos que permiten conocer si una serie temporal es estacionaria. 
+Una serie temporal se caracteriza por ser estacionaria si sus **propiedades se mantienen constantes durante el tiempo** observado. Existen tanto técnicas visuales como métodos estadísticos que permiten conocer si una serie temporal es estacionaria. 
 
    * **Test de *Dickery-Fuller* aumentado**. Se trata de un test estadístico cuya **hipótesis nula** representa la teoría de que la **serie no es estacionaria**. Como en cualquier test estadístico existen dos posibles situaciones:
    
-      * Estableciendo un umbral máximo de 0.05, si el p-valor resultante del test es mayor entonces **no existe evidencia estadística de que la serie sea estacionaria**. En tal caso deberemos aplicar tantas **diferenciaciones entre momentos** sobre la serie temporal como sean necesarias hasta obtener una serie estacionaria.
+      * Estableciendo un umbral máximo de 0.05, si el p-valor resultante del test es mayor entonces no existe evidencia estadística de que la serie sea estacionaria. En tal caso deberemos aplicar tantas **diferenciaciones sobre la serie temporal** como sean necesarias hasta obtener una serie estacionaria.
       
-      * Si el p-valor resultante es menor que el umbral fijado, entonces el test **rechaza la hipótesis nula** al 95% de confianza y por lo tanto se puede confirmar que **la serie temporal es estacionaria**.
+      * Si el p-valor resultante es menor que el umbral fijado, entonces el test rechaza la hipótesis nula al 95% de confianza y por lo tanto se puede confirmar que **la serie temporal es estacionaria**.
     
    * **Gráficos ACF y PACF**. Representan la **función de autocorrelación** total y parcial, respectivamente, asociadas a una serie temporal. Si se trata de una serie estacionaria, entonces la gráfica ACF se aproximará rápidamente a cero.
 
@@ -44,15 +60,15 @@ Uno de los modelos más utilizados para la predicción de series temporales es e
    
    * **Modelos de Medias Móviles** (*MA*). Representa una variante del modelo *AR* anterior cuyo enfoque consiste en calcular las predicciones futuras de una serie temporal en base a los **errores cometidos al predecir los *q* retardos anteriores** desde el instante actual.
    
-Adicionalmente, un modelo *ARIMA* también tiene en consideración el **número de diferenciaciones** que se haya realizado sobre la serie temporal, siendo expresado mediante el parámetro *d*.
+Adicionalmente, un modelo *ARIMA* también considera el **número de diferenciaciones** que han sido aplicadas sobre la serie temporal, siendo expresado mediante el parámetro *d*.
 
 ### Selección del tipo de modelo
 
-Para conocer qué tipo de modelo podemos utilizar para realizar las predicciones sobre una serie temporal, se pueden aplicar las siguientes reglas una vez disponemos de los gráficos ACF y PACF:
+Para conocer qué tipo de modelo podemos utilizar para realizar las predicciones sobre una serie temporal, se pueden aplicar las siguientes reglas tras representar los gráficos ACF y PACF:
 
 * Los modelos *AR* se caracterizan por disponer de un **gráfico ACF que tiende a cero**, con un orden *p* igual al número de valores diferentes que no se encuentran dentro de los umbrales definidos en un gráfico PACF.
 
-* Los modelos *MA* se definen a partir de un **gráfico PACF cuyos valores tienen a la baja**, y cuyo orden *q* es igual al número de valores distintos fuera de los umbrales establecidos en un gráfico ACF.
+* Los modelos *MA* se definen a partir de un **gráfico PACF cuyos valores tienden a disminuir**, y cuyo orden *q* es igual al número de valores distintos fuera de los umbrales establecidos en un gráfico ACF.
 
 ### Validación de los modelos
 
@@ -68,7 +84,11 @@ Existen diversas métricas que permiten comparar la bondad de diversos modelos e
 
 ### Predicciones reales
 
-Una vez disponemos disponemos de la formulación de un modelo entrenado y validado para resolver el problema en cuestión, **repetimos la descomposición de la serie además del entrenamiento del modelo con todo el conjunto de datos** para generar las predicciones requeridas. A continuación, deshacemos las modificaciones realizadas sobre la serie temporal en orden inverso para conseguir adaptar las predicciones generadas a la serie temporal original. Así, el primer paso consiste en deshacer la diferenciación de la serie, mientras que el segundo y último añade la componente estacional.
+Una vez disponemos disponemos de la formulación de un modelo entrenado y validado para resolver el problema en cuestión, **repetimos la descomposición de la serie además del entrenamiento del modelo con todo el conjunto de datos** para generar las predicciones requeridas. A continuación, deshacemos las modificaciones realizadas sobre la serie temporal en orden inverso para conseguir adaptar las predicciones generadas a la serie temporal original. Así, para esta serie temporal los pasos a seguir se describen a continuación:
+
+1. **Deshacer la diferenciación** realizada para convertir la serie temporal original en estacionaria.
+
+2. **Añadir la componente estacional** que se eliminó al comienzo del análisis para facilitar el modelado de la serie. 
 
 # Parte práctica
 
@@ -80,22 +100,25 @@ library(tseries)
 
 ## Análisis de la serie temporal
 
-En primer lugar cargamos los datos del fichero proporcionado utilizando la función `scan` y creamos un objeto específico para el tratamiento de series temporales. Comenzamos su análisis aplicando una **descomposición aditiva** para dividir la serie temporal en las tres componentes explicadas en la parte teórica: tendencia, estacionalidad y ruido. Un paso previo a la descomposición consiste en determinar **la frecuencia de la serie**. Al no conocer su valor real ni disponer de ningún tipo de contexto sobre la procedencia de los datos, considerando únicamente la existencia de 96 valores podemos intuir que se trata de una **serie mensual**. Si observamos las diferentes componentes representadas en el gráfico, a simple vista parece que la serie temporal con una frecuencia de 30 días **no tiene tendencia**, ya que su comportamiento no se asemeja a ninguna función matemática conocida. En cambio, **sí parece tratarse de una serie estacional** puesto que en la tercera gráfica aparece un mismo patrón repetitivo durante el mismo período de tiempo. Adicionalmente, en la última gráfica podemos observar que **el ruido parece totalmente aleatorio** por lo que parece estar compuesto por datos que no representan conocimiento útil. Finalmente, podemos apreciar que **no existen valores perdidos** por lo que no se aplicarán técnicas relativas a la imputación de este tipo de datos.
+En primer lugar cargamos los datos del fichero proporcionado utilizando la función `scan` y creamos un objeto específico para el tratamiento de series temporales. La primera verificación realizada consiste en conocer si existen valores perdidos en la serie para aplicar técnicas de imputación o eliminación. Sin embargo, tal y como podemos observar, **no existen datos faltantes** en esta serie temporal.
 
 ```{r}
 # Cargamos los datos de la serie temporal
 serie <- scan("dataseries.dat")
 # Comprobamos si existen valores perdidos
 sum(is.na(serie))
+```
+
+Continuamos su análisis aplicando una **descomposición aditiva** para dividir la serie temporal en las tres componentes explicadas en la parte teórica: tendencia, estacionalidad y ruido. Un paso previo a la descomposición consiste en determinar **la frecuencia de la serie**. Al no conocer su valor real ni disponer de ningún tipo de contexto sobre la procedencia de los datos, considerando únicamente la existencia de 96 valores podemos intuir que se trata de una **serie mensual**. Si observamos las diferentes componentes representadas en el gráfico, a simple vista parece que la serie temporal con una frecuencia de 30 días **no tiene tendencia**, ya que su comportamiento no se asemeja a ninguna función matemática conocida. En cambio, **sí parece tratarse de una serie estacional** puesto que en la tercera gráfica aparece un mismo patrón repetitivo durante el mismo período de tiempo. Adicionalmente, en la última gráfica podemos observar que **el ruido parece totalmente aleatorio** por lo que estos datos no aportan conocimiento útil para el problema de predicción.
+
+```{r}
 # Creamos un objeto time-series suponiendo una frecuencia mensual (30 días)
 serie.ts <- ts(serie, frequency=30)
 # Descomposición aditiva de la serie temporal
 plot(decompose(serie.ts))
 ```
 
-Sin embargo, visualizando el contenido del fichero parece existir un patrón divisorio de cinco valores, a excepción de la última línea, por lo que su **frecuencia podría ser de 5 días**. Si realizamos una segunda descomposición aditiva con este nuevo valor, podemos observar en la siguiente representación que la serie temporal **tampoco parece disponer de una tendencia reconocible, aunque su patrón estacional es más fácil de identificar**, comparado con el obtenido en el caso anterior asumiendo una frecuencia mensual. En relación a la componente ruidosa podemos observar que sus datos siguen pareciendo totalmente aleatorios, por lo que no se puede extraer información útil que nos ayude en el análisis y modelado de esta serie temporal.
-
-Tras comparar los resultados gráficos de sendos experimentos, en mi opinión el **comportamiento de esta serie temporal parece ser más fácil de explicar al establecer una frecuencia de 5 días** y por ende será la que considere en este trabajo.
+Sin embargo, visualizando el contenido del fichero parece existir un patrón divisorio de cinco valores, a excepción de la última línea, por lo que su **frecuencia podría ser de cinco días**. Si realizamos una segunda descomposición aditiva con este nuevo valor, podemos observar en la siguiente representación que la serie temporal **tampoco parece disponer de una tendencia reconocible, aunque su patrón estacional es más fácil de identificar**, comparado con el obtenido en el caso anterior asumiendo una frecuencia mensual. En relación a la componente ruidosa podemos observar que sus datos siguen pareciendo totalmente aleatorios, por lo que no se puede extraer información útil que nos ayude en el análisis y modelado de esta serie temporal.
 
 ```{r}
 # Cargamos los datos de la serie temporal
@@ -106,7 +129,8 @@ serie.ts <- ts(serie, frequency=5)
 plot(decompose(serie.ts))
 ```
 
-Una vez establecida la frecuencia, a continuación procedemos a aplicar la **técnica de filtrado** explicada anteriormente para confirmarque esta serie temporal no se caracteriza por una tendencia concreta. Para ello se calculan **las medidas móviles con un número diferente de puntos** con los que generar distintas aproximaciones a la serie temporal original y así intentar establecer alguna similitud con una función matemática. No obstante, tal y como podemos apreciar en las diferentes gráficas, no ha sido posible por lo que **esta serie temporal no tiene una tendencia definida**.
+Tras comparar los resultados gráficos de sendos experimentos, en mi opinión el comportamiento de esta serie temporal parece ser más fácil de explicar al establecer una **frecuencia de cinco días** y por ende será la que considere en este trabajo.
+A continuación procedemos a aplicar la **técnica de filtrado** explicada anteriormente para confirmar que esta serie temporal no se caracteriza por una tendencia concreta. Para ello se calculan **las medidas móviles con un número diferente de puntos** con los que generar distintas aproximaciones a la serie temporal original y así intentar establecer alguna similitud con una función matemática. No obstante, tal y como podemos apreciar en las diferentes gráficas, no ha sido posible por lo que **esta serie temporal no tiene una tendencia definida**.
 
 ```{r}
 for (k in 5:10) {
@@ -124,7 +148,7 @@ for (k in 5:10) {
 
 ## Conjuntos de entrenamiento y test
 
-El modelado de una serie temporal se reduce básicamente a la resolución de un problema de clasificación. Por ello, es necesario **dividir el conjunto de datos en entrenamiento y validación** con los que construir uno o varios modelos y testar su capacidad de generalización al realizar predicciones futuras. No obstante, al no disponer de ningún tipo de información o contexto sobre el problema de clasificación o la serie temporal, se ha optado por realizar una partición tradicional basada en un **90% de datos para entrenamiento y el 10% restante para test**. Cabe destacar la importancia de **preservar el orden temporal** de los datos de modo que el conjunto de entrenamiento estará compuesto por los primeros 86 datos, mientras que el de test dispondrá de los últimos 10 valores de la serie temporal.
+El modelado de una serie temporal se reduce básicamente a la resolución de un problema de clasificación. Por ello, es necesario **dividir el conjunto de datos en entrenamiento y test** con los que construir uno o varios modelos y validar su capacidad de generalización al realizar predicciones futuras. No obstante, al no disponer de ningún tipo de información o contexto sobre el problema de clasificación o la serie temporal, se ha optado por realizar una partición tradicional basada en un **90% de datos para entrenamiento y el 10% restante para test**. Cabe destacar la importancia de **preservar el orden temporal** de los datos de modo que el conjunto de entrenamiento estará compuesto por los primeros 86 datos, mientras que el de test dispondrá de los últimos 10 valores de la serie temporal.
 
 ```{r}
 # Calculamos el número de instancias que representan el 90% de los datos
@@ -147,7 +171,7 @@ lines(test.time, serie.test, col="red")
 
 ## Eliminación de la Estacionalidad
 
-En esta sección el objetivo consiste en **eliminar la componente estacional de la serie temporal**, tanto del conjunto de entrenamiento como del conjunto de test. Para separar cada una de las componentes explicadas en la parte teórica, hacemos uso de la **diferenciación aditiva** que realiza la función `decompose` para **restar la componente estacional a sendos conjuntos de datos**.
+En esta sección el objetivo consiste en **eliminar la componente estacional** de la serie temporal, tanto del conjunto de entrenamiento como del conjunto de test. Para separar cada una de las componentes explicadas en la parte teórica, hacemos uso de la **diferenciación aditiva** que realiza la función `decompose` para luego restar la componente estacional a sendos conjuntos de datos.
 
 ```{r}
 # Calculamos la estacionalidad asumiendo una frecuencia de 5 días
@@ -164,7 +188,7 @@ lines(test.time, serie.test.noSeas, col = "red")
 
 ## Análisis de la Estacionariedad
 
-Una vez disponemos de la serie temporal sin estacionalidad, puesto que no existía tendencia tal y como se demostró en su respectivo análisis, a continuación comenzamos el estudio de estacionariedad. Para ello aplicamos directamente el **test estadístico de Dickey-Fuller aumentado** estableciendo un **umbral del 95% de confianza**. Como podemos observar en el siguiente *chunk*, el p-valor obtenido es mayor que dicho umbral por lo que no se rechaza la hipótesis nula y como consecuencia **la serie no es estacionaria**.
+Una vez disponemos de la serie temporal sin estacionalidad, puesto que no existía tendencia tal y como se demostró en su respectivo análisis, a continuación comenzamos el estudio de la estacionariedad. Para ello aplicamos directamente el **test estadístico de Dickey-Fuller aumentado** estableciendo un **umbral del 95% de confianza**. Como podemos observar en el siguiente *chunk*, el p-valor obtenido es mayor que dicho umbral por lo que no se rechaza la hipótesis nula y como consecuencia **la serie no es estacionaria**.
 
 ```{r}
 # Primer test de Dickey-Fuller aumentado
@@ -197,7 +221,7 @@ En función de las reglas explicadas anteriormente en la parte teórica y a los 
 
 ### Modelo Autorregresivo
 
-Comenzamos por un **Modelo Autorregresivo de orden 1** puesto que únicamente el dato situado en *lag=2* es el que supera ligeramente el umbral superior en la gráfica PACF. Para finalizar la formulación del modelo **añadimos el grado de las diferencias** que se han realizado sobre la serie temporal para convertirla en estacionaria. El modelo resultante sería un **ARIMA(1, 1, 0)** no estacional aplicado sobre la serie sin estacionalidad. Con el objetivo de comparar su bondad se calculan tanto el **error de ajuste como el error sobre test**. Observando sendos valores podemos apreciar que la **capacidad de predicción del modelo no es muy buena**, ya que presenta casi un 40% de instancias mal clasificadas sobre el conjunto de test.
+Comenzamos por un **Modelo Autorregresivo de orden 1** puesto que únicamente el dato situado en *lag=2* es el que supera ligeramente el umbral superior en la gráfica PACF. Para finalizar la formulación del modelo **añadimos el grado de las diferencias** que se han realizado sobre la serie temporal para convertirla en estacionaria. El modelo resultante sería un **ARIMA(1, 1, 0)** no estacional aplicado sobre la serie sin estacionalidad. Con el objetivo de comparar su bondad se calculan el **error de ajuste y de test**. Observando sendos valores podemos apreciar que la **capacidad de predicción del modelo no es muy buena**, ya que presenta casi un 40% de instancias mal clasificadas sobre el conjunto de test.
 
 ```{r}
 # Construimos un primer modelo ARIMA(1, 1, 0)
@@ -213,7 +237,8 @@ arima.ar.test_error <- sum((arima.ar.preds - serie.test.noSeas)^2)
 arima.ar.train_error
 arima.ar.test_error
 ```
-A continuación representamos la serie temporal sin la componente estacional, diferenciando el conjunto de entrenamiento de color azul y el conjunto de test en color rojo. Sobre esta línea podemos observar de color verde que **las predicciones realizadas por el modelo apenas son mínimamente similares a los valores reales de test**.
+
+A continuación representamos la serie temporal sin la componente estacional, diferenciando el conjunto de entrenamiento de color azul y el conjunto de test en color rojo. Sobre esta línea podemos observar de color verde que las predicciones realizadas por el modelo apenas son **mínimamente similares a los valores reales** del conjunto de test.
 
 ```{r}
 # Gráfica de ajuste y predicción sobre test
@@ -223,7 +248,7 @@ lines(test.time, serie.test.noSeas, col="red")
 lines(test.time, arima.ar.preds, col="green")
 ```
 
-Procedemos a evaluar la bondad del modelo construido mediante un análisis de la autocorrelación de sus residuos verificando que no se encuentran relacionados entre sí y que siguen una distribución normal. Aplicando los tests estadísticos explicados en la parte teórica, podemos observar que todos devuelven un **p-valor mayor que el umbral fijado a 0.05**, por lo que no se rechazan ninguna de sus hipótesis nulas. Así, podemos determinar que los **residuos de este primer modelo no están correlados entre sí y siguen una distribución normal**.
+Procedemos a evaluar la bondad del modelo construido mediante un **análisis de la autocorrelación de sus residuos** verificando que no se encuentran relacionados entre sí y que siguen una distribución normal. Aplicando los tests estadísticos explicados en la parte teórica, podemos observar que todos devuelven un p-valor mayor que el umbral fijado a 0.05, por lo que no se rechazan ninguna de sus hipótesis nulas. Así, podemos determinar que los residuos de este primer modelo **no están correlados entre sí y siguen una distribución normal**.
 
 ```{r}
 # Test de Box-Pierce para comprobar las correlaciones entre los residuos 
@@ -234,7 +259,7 @@ jarque.bera.test(arima.ar$residuals)
 shapiro.test(arima.ar$residuals)
 ```
 
-Finalmente representamos un histograma de los residuos del modelo junto con su curva de densidad para afirmar gráficamente los resultados obtenidos de los tests estadísticos. Tal y como se puede apreciar, **su distribución es muy similar a una normal con media cero**. Por lo tanto, podemos determinar que la **ínfima capacidad de generalización del modelo** se debe en su totalidad a la **poca calidad y/o cantidad de datos disponibles**.
+Finalmente representamos un histograma de los residuos del modelo junto con su curva de densidad para afirmar gráficamente los resultados obtenidos de los tests estadísticos. Tal y como se puede apreciar, su distribución es muy similar a una normal con media cero. Por lo tanto, podemos determinar que la ínfima capacidad de generalización del modelo se debe en su totalidad a la **baja calidad y/o cantidad de datos disponibles**.
 
 ```{r}
 # Histograma y curva de densidad para visualizar los residuos del modelo
@@ -245,7 +270,7 @@ lines(density(arima.ar$residuals))
 
 ### Modelo de Medias Móviles
 
-En esta sección se pretende construir un **Modelo de Medias Móviles de orden 1** ya que si observamos el gráfico ACF solo existe un único valor por encima del límite superior. Del mismo modo que en el caso anterior, añadimos en la formulación el **grado de las diferencias** realizadas sobre la serie temporal para convertirla en estacionaria. Por lo tanto, el segundo modelo que se pretende construir es un **ARIMA(0, 1, 1)** no estacional aplicado sobre la serie sin estacionalidad. Como en el procedimiento anterior, calculamos el **error de ajuste y el error sobre test** para luego poder realizar una comparación entre sendos modelos. Según los resultados visualizados en el siguiente *chunk*, este segundo modelo **tampoco parece disponer de una buena capacidad de predicción**, inclusive puede llegar a ser menor puesto que su error sobre el conjunto de test es superior al Modelo Autorregresivo anterior.
+En esta sección se pretende construir un **Modelo de Medias Móviles de orden 1** ya que si observamos el gráfico ACF solo existe un único valor por encima del límite superior. Del mismo modo que en el caso anterior, añadimos en la formulación el **grado de las diferencias** realizadas sobre la serie temporal para convertirla en estacionaria. Por lo tanto, el segundo modelo que se pretende construir es un **ARIMA(0, 1, 1)** no estacional aplicado sobre la serie sin estacionalidad. Como en el procedimiento anterior, calculamos el **error de ajuste y sobre test** para luego poder realizar una comparación entre sendos modelos. Según los resultados visualizados en el siguiente *chunk*, este segundo modelo **tampoco parece disponer de una buena capacidad de predicción**, inclusive puede llegar a ser menor puesto que su error sobre el conjunto de test es superior al Modelo Autorregresivo anterior.
 
 ```{r}
 # Construimos un modelo ARIMA(0, 1, 1)
@@ -262,7 +287,7 @@ arima.ma.train_error
 arima.ma.test_error
 ```
 
-Si repetimos la misma representación del modelo anterior pero considerando las predicciones realizadas por este segundo Modelo basado en Medias Móviles, podemos apreciar que **no se ajustan para nada al conjunto de test** que se intenta predecir, si comparamos las líneas naranja y roja, respectivamente. 
+Si repetimos la misma representación del modelo anterior pero considerando las predicciones realizadas por este segundo clasificador basado en Medias Móviles, podemos apreciar que **no se ajustan al conjunto de test** que se intenta predecir, si comparamos las líneas naranja y roja, respectivamente. 
 
 ```{r}
 # Gráfica de ajuste y predicción sobre test
@@ -272,7 +297,7 @@ lines(test.time, serie.test.noSeas, col="red")
 lines(test.time, arima.ma.preds, col="orange")
 ```
 
-Evaluamos la calidad del modelo aplicando los mismos tests de correlación y normalidad de residuos sobre este segundo modelo. Nuevamente podemos observar que todos los p-valores resultantes son mayores que el umbral fijado en 0.05, por lo que no se rechazan las hipótesis nulas y podemos determinar que los **residuos del segundo modelo no están correlados y siguen una distribución normal**.
+Evaluamos la calidad del modelo aplicando los mismos tests de correlación y normalidad de residuos. Nuevamente podemos observar que todos los p-valores resultantes son mayores que el umbral fijado en 0.05, por lo que no se rechazan las hipótesis nulas y podemos determinar que los residuos del segundo modelo **no están correlados y siguen una distribución normal**.
 
 ```{r}
 # Test de Box-Pierce para comprobar las correlaciones entre los residuos 
@@ -284,7 +309,7 @@ shapiro.test(arima.ma$residuals)
 ```
 
 
-Visualizando el histograma y la curva de densidad de los residuos de este Modelo basado en Medias Móviles, podemos apreciar que de nuevo su **distribución parece ser una normal centrada en media cero**. Por lo tanto, parece ser que la razón explicativa de la baja capacidad de predicción de sendos modelos se concentra en la **baja calidad o insuficiencia de los datos disponibles** para su entrenamiento y validación.
+Visualizando el histograma y la curva de densidad de los residuos de este clasificador basado en Medias Móviles, podemos apreciar que de nuevo su distribución parece ser una **normal centrada en media cero**. Por lo tanto, parece ser que la razón explicativa de la baja capacidad de predicción de sendos clasificadores se concentra en la **pésima calidad y/o insuficiencia de los datos** disponibles para su entrenamiento y validación.
 
 ```{r}
 # Histograma y curva de densidad para visualizar los residuos del modelo
@@ -295,9 +320,9 @@ lines(density(arima.ma$residuals))
 
 ## Predicciones reales
 
-Tras la construcción, validación y análisis de un Modelo Autorregresivo y otro basado en Medias Móviles, en función de los errores cuadráticos acumulados del ajuste en entrenamiento y test, podemos determinar que el **primer clasificador parece proporcionar resultados algo más certeros**, aunque ambos disponen de una capacidad de predicción bastante pésima. Por lo tanto, las dos predicciones que se pretenden calcular a partir de la serie temporal se realizarán con el Modelo Autorregresivo.
+Tras la construcción, validación y análisis de un Modelo Autorregresivo y otro basado en Medias Móviles, en función de los errores cuadráticos acumulados del ajuste en entrenamiento y test, podemos determinar que el **primer clasificador parece proporcionar resultados algo más certeros**, aunque ambos disponen de una capacidad de predicción bastante inferior. Por lo tanto, las dos predicciones que se pretenden calcular a partir de la serie temporal se realizarán con el Modelo Autorregresivo.
 
-Tal y como se ha explicado en la parte teórica, repetimos el mismo procedimiento anterior para **eliminar la componente estacional y construir un modelo ARIMA(1, 1, 0)** pero a partir de la serie temporal al completo. Tras construir el clasificador, podemos **generar los dos nuevos valores futuros** de la serie volviendo a aplicar la componente estacional eliminada para simplificar el modelado. En la siguiente gráfica podemos observar en azul el conjunto de datos disponible para ajustar el clasificador y en rojo las dos predicciones realizadas por el modelo.
+Tal y como se ha explicado en la parte teórica, repetimos el mismo procedimiento anterior para **eliminar la componente estacional y construir un modelo ARIMA(1, 1, 0)** pero a partir de la serie temporal al completo. Tras construir el clasificador, podemos **generar los dos nuevos valores futuros** de la serie volviendo a aplicar la componente estacional eliminada al comienzo de este proceso. En la siguiente gráfica podemos observar en azul el conjunto de datos disponible para ajustar el clasificador y en rojo las dos predicciones realizadas por el modelo.
 
 ```{r}
 # Eliminamos la estacionalidad de la serie completa
