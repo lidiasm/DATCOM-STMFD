@@ -1,0 +1,70 @@
+---
+title: "Trabajo Autónomo II: Minería de Flujo de Datos"
+author: "Lidia Sánchez Mérida"
+output: pdf_document
+---
+
+# Parte práctica
+
+En este *script* se encuentra el código definido para cargar las métricas asociadas a los distintos clasificadores entrenados con diferentes semillas para lograr dos objetivos:
+
+1. En primer lugar procedemos a representar las poblaciones de los algoritmos que deseemos comparar a través de un **diagrama de cajas y bigotes** o *boxplot*.
+
+2. Para comparar las bondades de los clasificadores deberemos aplicar tests estadísticos que certifiquen si existen diferencias considerables entre el rendimiento de los modelos.  
+
+   * Utilizamos los **tests de Jarque Bera y Shapiro-Wilk** con el fin de verificar si las poblaciones obtenidas siguen una distribución normal. Ambos parten de una hipótesis nula que apoya la teoría de que **los datos no siguen una distribución normal**. Si establecemos un umbral de confianza del 95%, en caso de que el p-valor del test sea menor, se rechaza la hipótesis nula y por tanto podemos determinar que la población sigue una distribución normal. 
+   
+   * Dependiendo de los resultados de los tests anteriores, deberemos aplicar un test paramétrico o no paramétrico para comparar el rendimiento de los dos clasificadores entrenados bajo las mismas condiciones y utilizando el mismo conjunto de datos. En el primer caso podremos utilizar un **test de Student para muestras pareadas**, mientras que como test no paramétrico podemos hacer uso del **test de Wilcoxon**. Sus hipótesis nulas se basan en la **igualdad de ambas poblaciones**, por lo que estableciendo un umbral similar al anterior, si el p-valor resultante es inferior entonces se rechaza la hipótesis nula y se confirma que existen diferencias estadísticamente significativas entre los dos modelos. 
+
+```{r}
+# Función que itera sobre una carpeta proporcionada y carga los ficheros CSV
+# resultantes de la ejecución de un script MOA con el objetivo de obtener la
+# población de tasas de acierto asociada
+load_moad_results <- function(folder) {
+  # Leemos los diferentes ficheros CSV con los resultados de las diferentes
+  # iteraciones
+  files <- list.files(path=folder, full.names=TRUE, recursive=FALSE)
+  # Cargamos los datos como dataframes y accedemos a la columna que contiene la 
+  # tasa de aciertos
+  accuracy <- lapply(files, function(x) {
+    data <- read.csv(x, header=TRUE)
+    return(data[, 3])
+  })
+  # Convertimos la lista de valores accuracy a un vector numérico
+  return(unlist(accuracy, use.names=FALSE))
+}
+```
+
+## 2.1. Entrenamiento offline (estacionario) y evaluación posterior.
+
+```{r}
+# Ejercicio 2.1. HoeffdingTree offline
+ht_offline_accuracy <- load_moad_results("ht_offline_results")
+# Ejercicio 2.1. HoeffdingTree offline adaptativo
+hat_offline_accuracy <- load_moad_results("hat_offline_results")
+# Creamos un dataframe para representar los resultados de sendos clasificadores
+df <- data.frame(HoeffdingTree=ht_offline_accuracy,
+                 HoeffdingAdaptiveTree=hat_offline_accuracy)
+# Representamos ambas poblaciones en un boxplot
+boxplot(df, col=c("orange", "purple"))
+```
+La población relativa al clasificador *HoeffdingTree* sigue una distribución normal puesto que ambos tests el p-valor es mayor que el umbral fijado en 0.05. Sin embargo, no ocurre lo mismo con el segundo modelo *HoeffdingAdaptiveTree* puesto que ambos tests rechazan la hipótesis nula con p-valores menores que el umbral. Por lo que para comparar ambos clasificadores deberemos de utilizar el **test no paramétrico de Wilcoxon**.
+
+```{r}
+# Aplicamos los tests de Jarque Bera y Shapiro para comprobar si ambas 
+# poblaciones siguen una distribución normal
+# Hipótesis nula: los datos no siguen una distribución normal
+# Con una confianza del 95%, si el p-value > 0.05 -> los datos son normales
+jarque.bera.test(df$HoeffdingTree)
+shapiro.test(df$HoeffdingTree)
+jarque.bera.test(df$HoeffdingAdaptiveTree)
+shapiro.test(df$HoeffdingAdaptiveTree)
+```
+
+El p-valor resultante es de 0.7845, mayor que el umbral definido por lo que no se rechaza la hipótesis nula de que ambos algoritmos disponen de comportamientos semejantes. 
+
+```{r}
+# Test no paramétrico de Wilcoxon para comparar ambos clasificadores
+wilcox.test(df$HoeffdingTree, df$HoeffdingAdaptiveTree)
+```
+
