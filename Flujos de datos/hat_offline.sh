@@ -1,7 +1,7 @@
 #!/bin/bash
+mkdir -p hat_offline_results
 for seed in $(seq 30)
 do
-    echo $seed
     java -cp moa.jar -javaagent:sizeofag-1.0.4.jar moa.DoTask \
     "EvaluateModel -m (
         LearnModel -l trees.HoeffdingAdaptiveTree
