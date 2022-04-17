@@ -76,7 +76,7 @@ Uno de los métodos más popularmente utilizados para validar un modelo entrenad
 
 * Sus residuos **no están correlados**, lo que significa que los datos no modelados son aleatorios y no existe conocimiento útil en ellos para mejorar el clasificador. Para demostrar esta teoría se puede aplicar el **test de Box-Pierce cuya hipótesis nula afirma que los datos son independientes**. Estableciendo una confianza del 95%, si el p-valor resultante es menor que 0.05 entonces podríamos determinar que los residuos están relacionados entre sí y por ende el modelo es mejorable. 
 
-* Los residuos siguen una **distribución normal**, en cuyo caso simboliza que el modelo es estable y dispone de una varianza constante, por lo que es suficientemente robusto como para que la tasa de error no se dispare en ninguna ocasión. Los **tests de Jarque Bera y Shapiro-Wilk** son popularmente usados para verificar esta condición. Como **hipótesis nula se establece que los datos no siguen una distribución normal** por lo que, si el p-valor resultante es menor que el umbral fijado a 0.05, se rechazaría esta teoría y por ende los datos no siguen una distribución normal.
+* Los residuos siguen una **distribución normal**, en cuyo caso simboliza que el modelo es estable y dispone de una varianza constante, por lo que es suficientemente robusto como para que la tasa de error no se dispare en ninguna ocasión. Los **tests de Jarque Bera y Shapiro-Wilk** son popularmente usados para verificar esta condición. Como **hipótesis nula se establece que los datos siguen una distribución normal** por lo que, si el p-valor resultante es menor que el umbral fijado a 0.05, se rechazaría esta teoría y por ende los datos no siguen una distribución normal.
 
 ### Comparación de varios modelos
 
