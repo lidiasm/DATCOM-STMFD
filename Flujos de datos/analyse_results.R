@@ -21,14 +21,17 @@ load_moad_results <- function(folder, n_acc_col) {
   return(unlist(accuracy, use.names=FALSE))
 }
 
-# Leemos las métricas resultantes de ambos clasificadores
-model1.acc <- load_moad_results("ht_online_results", 5) #3
-model2.acc <- load_moad_results("hat_online_results", 5) #3
+# Leemos las métricas resultantes de ambos clasificadores. Para ello especificamos
+# - El nombre de la carpeta donde se encuentran los resultados
+# - El número de la columna que contiene las tasas de aciertos, empezando desde 1
+model1.acc <- load_moad_results("ejercicio_2.1.1", 3) 
+model2.acc <- load_moad_results("ejercicio_2.1.2", 3) 
 # Creamos un dataframe para representar los resultados
 df <- data.frame(HoeffdingTree=model1.acc,
                  HoeffdingAdaptiveTree=model2.acc)
-# Almacenamos las tasas de aciertos finales en un fichero CSV
-write.csv(df, "Online.csv") #Offline.csv
+# Almacenamos las tasas de aciertos finales en un fichero CSV para construir una
+# tabla con las precisiones de los modelos de cada técnica
+write.csv(df, "ejercicio_2.1.csv") 
 # Representamos ambas poblaciones en un boxplot
 boxplot(df, col=c("orange", "purple"))
 
